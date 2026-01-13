@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenRisk-Advisor Dashboard</title>
+    <link rel="preconnect" href="." />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg"></div>
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div class="brand-text">
+          <div class="brand-title">OpenRisk-Advisor</div>
+          <div class="brand-sub">开源项目衰退风险预测与治理证据看板</div>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="meta" id="metaLine">加载中…</div>
+        <div class="actions">
+          <button class="btn btn-ghost" id="fullscreenBtn">全屏</button>
+          <button class="btn" id="refreshBtn">刷新</button>
+          <button class="btn btn-ghost" id="exportBtn">导出 JSON</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="panel kpis">
+        <div class="panel-title">全局概览</div>
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">仓库数</div>
+            <div class="kpi-value" id="kpiRepos">—</div>
+            <div class="kpi-hint" id="kpiAsOf">—</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">高风险</div>
+            <div class="kpi-value kpi-high" id="kpiHigh">—</div>
+            <div class="kpi-hint">需要优先介入评估</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">中风险</div>
+            <div class="kpi-value kpi-mid" id="kpiMid">—</div>
+            <div class="kpi-hint">建议持续观察</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">低风险</div>
+            <div class="kpi-value kpi-low" id="kpiLow">—</div>
+            <div class="kpi-hint">当前未见显著衰退</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">需复核</div>
+            <div class="kpi-value" id="kpiReview">—</div>
+            <div class="kpi-hint">数据缺失/不确定性偏高</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">平均风险</div>
+            <div class="kpi-value" id="kpiAvg">—</div>
+            <div class="kpi-hint">校准后风险概率均值</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel charts">
+        <div class="panel-title">风险分布</div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <div class="chart-title">风险等级分布</div>
+            <canvas id="donutRisk"></canvas>
+            <div class="legend" id="legendRisk"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">风险直方图（0-1）</div>
+            <canvas id="histRisk"></canvas>
+            <div class="hint">校准后风险概率的分布（分箱统计）</div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Top 维度（证据链）</div>
+            <canvas id="barDims"></canvas>
+            <div class="hint">统计每个仓库主信号维度（Top-N signals）出现频次</div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Top 信号（出现次数）</div>
+            <canvas id="barSignals"></canvas>
+            <div class="hint">统计各 signal_id 在 main_signals 中出现的频次（去重前）</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel table">
+        <div class="panel-head">
+          <div class="panel-title">风险项目列表</div>
+          <div class="filters">
+            <input class="input" id="searchInput" placeholder="搜索 org/repo…" />
+            <select class="select" id="levelFilter">
+              <option value="all">全部等级</option>
+              <option value="High">高风险</option>
+              <option value="Medium">中风险</option>
+              <option value="Low">低风险</option>
+            </select>
+            <label class="check">
+              <input type="checkbox" id="reviewOnly" />
+              <span>仅需复核</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table" aria-label="Risk table">
+            <thead>
+              <tr>
+                <th>Repo</th>
+                <th>Risk</th>
+                <th>Level</th>
+                <th>Review</th>
+                <th>Signals</th>
+                <th>t0</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="panel detail" id="detailPane" aria-live="polite">
+        <div class="panel-title">项目详情</div>
+        <div class="empty" id="detailEmpty">
+          <div class="empty-title">请选择一个项目</div>
+          <div class="empty-sub">点击左侧表格任意行查看证据链</div>
+        </div>
+
+        <div class="detail-body hidden" id="detailBody">
+          <div class="detail-head">
+            <div class="detail-repo" id="detailRepo">—</div>
+            <div class="pill" id="detailLevel">—</div>
+          </div>
+          <div class="detail-kpis">
+            <div class="mini">
+              <div class="mini-label">风险概率</div>
+              <div class="mini-value" id="detailScore">—</div>
+            </div>
+            <div class="mini">
+              <div class="mini-label">需复核</div>
+              <div class="mini-value" id="detailReview">—</div>
+            </div>
+            <div class="mini">
+              <div class="mini-label">数据缺失率</div>
+              <div class="mini-value" id="detailMissing">—</div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <div class="section-title">主导信号（证据链）</div>
+            <div class="signals" id="detailSignals"></div>
+          </div>
+
+          <div class="detail-section">
+            <div class="section-title">模型线索（辅助）</div>
+            <div class="aux" id="detailAux"></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <div class="foot-left">
+        <span class="dot"></span>
+        <span id="statusLine">就绪</span>
+      </div>
+      <div class="foot-right">
+        数据源：<code>docs/risk_report.json</code>
+      </div>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

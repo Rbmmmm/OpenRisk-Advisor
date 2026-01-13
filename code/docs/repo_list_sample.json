@@ -1,0 +1,1504 @@
+{
+  "items": [
+    {
+      "id": "736802660",
+      "platform": "github",
+      "repo_name": "ghscr/ghscription"
+    },
+    {
+      "id": "75821432",
+      "platform": "github",
+      "repo_name": "llvm/llvm-project"
+    },
+    {
+      "id": "4542716",
+      "platform": "github",
+      "repo_name": "NixOS/nixpkgs"
+    },
+    {
+      "id": "659055391",
+      "platform": "github",
+      "repo_name": "7Sence/Rise-Beta"
+    },
+    {
+      "id": "915466139",
+      "platform": "github",
+      "repo_name": "CypherV2/Donarev-API"
+    },
+    {
+      "id": "807011459",
+      "platform": "github",
+      "repo_name": "DXVVAY/hcaptcha-reverse"
+    },
+    {
+      "id": "905109077",
+      "platform": "github",
+      "repo_name": "CSolverV2/hCaptcha-ID-Decoder"
+    },
+    {
+      "id": "884954898",
+      "platform": "github",
+      "repo_name": "emrovsky/x-ms-reference-id"
+    },
+    {
+      "id": "19745004",
+      "platform": "github",
+      "repo_name": "odoo/odoo"
+    },
+    {
+      "id": "884541859",
+      "platform": "github",
+      "repo_name": "emrovsky/hcaptcha-blob-encryption"
+    },
+    {
+      "id": "41881900",
+      "platform": "github",
+      "repo_name": "microsoft/vscode"
+    },
+    {
+      "id": "65600975",
+      "platform": "github",
+      "repo_name": "pytorch/pytorch"
+    },
+    {
+      "id": "936737993",
+      "platform": "github",
+      "repo_name": "justachillcoder/binance-captcha-deobfuscator"
+    },
+    {
+      "id": "12888993",
+      "platform": "github",
+      "repo_name": "home-assistant/core"
+    },
+    {
+      "id": "7833168",
+      "platform": "github",
+      "repo_name": "elastic/kibana"
+    },
+    {
+      "id": "599547518",
+      "platform": "github",
+      "repo_name": "vllm-project/vllm"
+    },
+    {
+      "id": "59771425",
+      "platform": "github",
+      "repo_name": "zephyrproject-rtos/zephyr"
+    },
+    {
+      "id": "937253475",
+      "platform": "github",
+      "repo_name": "anthropics/claude-code"
+    },
+    {
+      "id": "197275551",
+      "platform": "github",
+      "repo_name": "microsoft/winget-pkgs"
+    },
+    {
+      "id": "771125988",
+      "platform": "github",
+      "repo_name": "DeepakReddyG/ZeroOneCodeClub_FirstWebDevProject"
+    },
+    {
+      "id": "285902689",
+      "platform": "github",
+      "repo_name": "Expensify/App"
+    },
+    {
+      "id": "856044507",
+      "platform": "github",
+      "repo_name": "AG-597/Csolver"
+    },
+    {
+      "id": "310632133",
+      "platform": "github",
+      "repo_name": "solana-labs/token-list"
+    },
+    {
+      "id": "340547520",
+      "platform": "github",
+      "repo_name": "zed-industries/zed"
+    },
+    {
+      "id": "151430926",
+      "platform": "github",
+      "repo_name": "IntelAISociety/Hello-world"
+    },
+    {
+      "id": "10919030",
+      "platform": "gitee",
+      "repo_name": "openharmony/docs"
+    },
+    {
+      "id": "462096007",
+      "platform": "github",
+      "repo_name": "taozhiyu/TyProAction"
+    },
+    {
+      "id": "740303686",
+      "platform": "github",
+      "repo_name": "sgl-project/sglang"
+    },
+    {
+      "id": "601205363",
+      "platform": "github",
+      "repo_name": "tenstorrent/tt-metal"
+    },
+    {
+      "id": "133843125",
+      "platform": "github",
+      "repo_name": "department-of-veterans-affairs/va.gov-team"
+    },
+    {
+      "id": "806207719",
+      "platform": "github",
+      "repo_name": "dropout1337/wasm-commenter"
+    },
+    {
+      "id": "15111821",
+      "platform": "github",
+      "repo_name": "grafana/grafana"
+    },
+    {
+      "id": "724712",
+      "platform": "github",
+      "repo_name": "rust-lang/rust"
+    },
+    {
+      "id": "15634981",
+      "platform": "github",
+      "repo_name": "godotengine/godot"
+    },
+    {
+      "id": "16184977",
+      "platform": "gitee",
+      "repo_name": "openharmony/interface_sdk-js"
+    },
+    {
+      "id": "800182815",
+      "platform": "github",
+      "repo_name": "LayerZero-Labs/sybil-report"
+    },
+    {
+      "id": "965415649",
+      "platform": "github",
+      "repo_name": "openai/codex"
+    },
+    {
+      "id": "975734319",
+      "platform": "github",
+      "repo_name": "sst/opencode"
+    },
+    {
+      "id": "320636477",
+      "platform": "github",
+      "repo_name": "WebKit/WebKit"
+    },
+    {
+      "id": "679366051",
+      "platform": "github",
+      "repo_name": "NVIDIA/TensorRT-LLM"
+    },
+    {
+      "id": "115153929",
+      "platform": "github",
+      "repo_name": "harness/harness-core"
+    },
+    {
+      "id": "968197216",
+      "platform": "github",
+      "repo_name": "google-gemini/gemini-cli"
+    },
+    {
+      "id": "11218621",
+      "platform": "gitee",
+      "repo_name": "openharmony/xts_acts"
+    },
+    {
+      "id": "217260457",
+      "platform": "github",
+      "repo_name": "kusamanetwork/faucet"
+    },
+    {
+      "id": "60246359",
+      "platform": "github",
+      "repo_name": "ClickHouse/ClickHouse"
+    },
+    {
+      "id": "149121954",
+      "platform": "github",
+      "repo_name": "openjdk/jdk"
+    },
+    {
+      "id": "873328",
+      "platform": "github",
+      "repo_name": "getsentry/sentry"
+    },
+    {
+      "id": "182610179",
+      "platform": "github",
+      "repo_name": "openbilibili/go-common"
+    },
+    {
+      "id": "507775",
+      "platform": "github",
+      "repo_name": "elastic/elasticsearch"
+    },
+    {
+      "id": "825752060",
+      "platform": "github",
+      "repo_name": "DevDegree/eng-intern-challenge"
+    },
+    {
+      "id": "31792824",
+      "platform": "github",
+      "repo_name": "flutter/flutter"
+    },
+    {
+      "id": "49970739",
+      "platform": "github",
+      "repo_name": "DataDog/datadog-agent"
+    },
+    {
+      "id": "75224144",
+      "platform": "github",
+      "repo_name": "openshift/release"
+    },
+    {
+      "id": "193215554",
+      "platform": "github",
+      "repo_name": "n8n-io/n8n"
+    },
+    {
+      "id": "8649239",
+      "platform": "gitee",
+      "repo_name": "mindspore/mindspore"
+    },
+    {
+      "id": "971570345",
+      "platform": "github",
+      "repo_name": "ROCm/rocm-libraries"
+    },
+    {
+      "id": "626805178",
+      "platform": "github",
+      "repo_name": "langgenius/dify"
+    },
+    {
+      "id": "365697493",
+      "platform": "github",
+      "repo_name": "leanprover-community/mathlib4"
+    },
+    {
+      "id": "81598961",
+      "platform": "github",
+      "repo_name": "python/cpython"
+    },
+    {
+      "id": "33884891",
+      "platform": "github",
+      "repo_name": "apache/airflow"
+    },
+    {
+      "id": "612354784",
+      "platform": "github",
+      "repo_name": "ggml-org/llama.cpp"
+    },
+    {
+      "id": "21740844",
+      "platform": "github",
+      "repo_name": "openshift/openshift-docs"
+    },
+    {
+      "id": "235901813",
+      "platform": "github",
+      "repo_name": "PostHog/posthog"
+    },
+    {
+      "id": "456549280",
+      "platform": "github",
+      "repo_name": "ydb-platform/ydb"
+    },
+    {
+      "id": "881221486",
+      "platform": "github",
+      "repo_name": "volcengine/verl"
+    },
+    {
+      "id": "357728969",
+      "platform": "github",
+      "repo_name": "oven-sh/bun"
+    },
+    {
+      "id": "210716005",
+      "platform": "github",
+      "repo_name": "dotnet/runtime"
+    },
+    {
+      "id": "33202667",
+      "platform": "github",
+      "repo_name": "department-of-veterans-affairs/vets-website"
+    },
+    {
+      "id": "301216792",
+      "platform": "github",
+      "repo_name": "is-a-dev/register"
+    },
+    {
+      "id": "71932349",
+      "platform": "github",
+      "repo_name": "ray-project/ray"
+    },
+    {
+      "id": "741179220",
+      "platform": "github",
+      "repo_name": "zanfranceschi/rinha-de-backend-2024-q1"
+    },
+    {
+      "id": "671269505",
+      "platform": "github",
+      "repo_name": "BerriAI/litellm"
+    },
+    {
+      "id": "264323169",
+      "platform": "github",
+      "repo_name": "education/graduation"
+    },
+    {
+      "id": "155220641",
+      "platform": "github",
+      "repo_name": "huggingface/transformers"
+    },
+    {
+      "id": "20580498",
+      "platform": "github",
+      "repo_name": "kubernetes/kubernetes"
+    },
+    {
+      "id": "65750241",
+      "platform": "github",
+      "repo_name": "expo/expo"
+    },
+    {
+      "id": "99919302",
+      "platform": "github",
+      "repo_name": "apache/doris"
+    },
+    {
+      "id": "30203935",
+      "platform": "github",
+      "repo_name": "metabase/metabase"
+    },
+    {
+      "id": "516657210",
+      "platform": "github",
+      "repo_name": "wjz304/rpcb"
+    },
+    {
+      "id": "68720867",
+      "platform": "github",
+      "repo_name": "firstcontributions/first-contributions"
+    },
+    {
+      "id": "2310495",
+      "platform": "github",
+      "repo_name": "ceph/ceph"
+    },
+    {
+      "id": "5736080",
+      "platform": "github",
+      "repo_name": "FreeCAD/FreeCAD"
+    },
+    {
+      "id": "268849413",
+      "platform": "github",
+      "repo_name": "HNGi7-Team-Falcon/HNG-Task-2-Team-Falcon"
+    },
+    {
+      "id": "70107786",
+      "platform": "github",
+      "repo_name": "vercel/next.js"
+    },
+    {
+      "id": "54298946",
+      "platform": "github",
+      "repo_name": "camunda/camunda"
+    },
+    {
+      "id": "52331602",
+      "platform": "github",
+      "repo_name": "openjournals/joss-reviews"
+    },
+    {
+      "id": "2967233",
+      "platform": "github",
+      "repo_name": "DataDog/documentation"
+    },
+    {
+      "id": "80862584",
+      "platform": "github",
+      "repo_name": "WordPress/gutenberg"
+    },
+    {
+      "id": "356857049",
+      "platform": "github",
+      "repo_name": "frontierdotxyz/frontier-chain-testnets"
+    },
+    {
+      "id": "585377519",
+      "platform": "github",
+      "repo_name": "nus-cs2030/2223-s2"
+    },
+    {
+      "id": "881717007",
+      "platform": "github",
+      "repo_name": "GSSoC24/Hack-Web3Conf"
+    },
+    {
+      "id": "45821540",
+      "platform": "github",
+      "repo_name": "openwrt/openwrt"
+    },
+    {
+      "id": "924058625",
+      "platform": "github",
+      "repo_name": "vllm-project/vllm-ascend"
+    },
+    {
+      "id": "128479644",
+      "platform": "github",
+      "repo_name": "esphome/esphome"
+    },
+    {
+      "id": "16563587",
+      "platform": "github",
+      "repo_name": "cockroachdb/cockroach"
+    },
+    {
+      "id": "900336754",
+      "platform": "github",
+      "repo_name": "DCH81/hCaptcha-fingerprint-blob"
+    },
+    {
+      "id": "60525392",
+      "platform": "github",
+      "repo_name": "demisto/content"
+    },
+    {
+      "id": "31558937",
+      "platform": "github",
+      "repo_name": "gravitational/teleport"
+    },
+    {
+      "id": "53538899",
+      "platform": "github",
+      "repo_name": "bitwarden/clients"
+    },
+    {
+      "id": "156648725",
+      "platform": "github",
+      "repo_name": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    {
+      "id": "141427485",
+      "platform": "github",
+      "repo_name": "MetaMask/metamask-mobile"
+    },
+    {
+      "id": "92001425",
+      "platform": "github",
+      "repo_name": "space-wizards/space-station-14"
+    },
+    {
+      "id": "198770415",
+      "platform": "github",
+      "repo_name": "1995parham/github-do-not-ban-us"
+    },
+    {
+      "id": "869741127",
+      "platform": "github",
+      "repo_name": "Flowseal/zapret-discord-youtube"
+    },
+    {
+      "id": "803014189",
+      "platform": "github",
+      "repo_name": "better-auth/better-auth"
+    },
+    {
+      "id": "455229168",
+      "platform": "github",
+      "repo_name": "immich-app/immich"
+    },
+    {
+      "id": "962090208",
+      "platform": "github",
+      "repo_name": "ROCm/rocm-systems"
+    },
+    {
+      "id": "214587193",
+      "platform": "github",
+      "repo_name": "supabase/supabase"
+    },
+    {
+      "id": "408858330",
+      "platform": "github",
+      "repo_name": "raycast/extensions"
+    },
+    {
+      "id": "48109239",
+      "platform": "github",
+      "repo_name": "cilium/cilium"
+    },
+    {
+      "id": "805155266",
+      "platform": "github",
+      "repo_name": "CherryHQ/cherry-studio"
+    },
+    {
+      "id": "309820286",
+      "platform": "github",
+      "repo_name": "fleetdm/fleet"
+    },
+    {
+      "id": "45936895",
+      "platform": "github",
+      "repo_name": "Automattic/wp-calypso"
+    },
+    {
+      "id": "292673424",
+      "platform": "github",
+      "repo_name": "cloudflare/cloudflare-docs"
+    },
+    {
+      "id": "44838949",
+      "platform": "github",
+      "repo_name": "swiftlang/swift"
+    },
+    {
+      "id": "685460348",
+      "platform": "github",
+      "repo_name": "dymensionxyz/rollapp-registry"
+    },
+    {
+      "id": "3234987",
+      "platform": "github",
+      "repo_name": "tgstation/tgstation"
+    },
+    {
+      "id": "268843149",
+      "platform": "github",
+      "repo_name": "kadetXx/HNG-Script"
+    },
+    {
+      "id": "62409417",
+      "platform": "github",
+      "repo_name": "department-of-veterans-affairs/vets-api"
+    },
+    {
+      "id": "942206898",
+      "platform": "github",
+      "repo_name": "ai-dynamo/dynamo"
+    },
+    {
+      "id": "639181837",
+      "platform": "github",
+      "repo_name": "woowacourse/jwp-shopping-order"
+    },
+    {
+      "id": "350360184",
+      "platform": "github",
+      "repo_name": "calcom/cal.com"
+    },
+    {
+      "id": "51449239",
+      "platform": "github",
+      "repo_name": "department-of-veterans-affairs/caseflow"
+    },
+    {
+      "id": "59304843",
+      "platform": "github",
+      "repo_name": "githubschool/open-enrollment-classes-introduction-to-github"
+    },
+    {
+      "id": "110198384",
+      "platform": "github",
+      "repo_name": "brave/brave-core"
+    },
+    {
+      "id": "824874689",
+      "platform": "github",
+      "repo_name": "cline/cline"
+    },
+    {
+      "id": "385958416",
+      "platform": "github",
+      "repo_name": "AliceO2Group/O2Physics"
+    },
+    {
+      "id": "244694174",
+      "platform": "github",
+      "repo_name": "project-chip/connectedhomeip"
+    },
+    {
+      "id": "45865171",
+      "platform": "github",
+      "repo_name": "microsoftgraph/microsoft-graph-docs"
+    },
+    {
+      "id": "166008577",
+      "platform": "github",
+      "repo_name": "intel/llvm"
+    },
+    {
+      "id": "402945349",
+      "platform": "github",
+      "repo_name": "StarRocks/starrocks"
+    },
+    {
+      "id": "42009758",
+      "platform": "github",
+      "repo_name": "MetaMask/metamask-extension"
+    },
+    {
+      "id": "24410210",
+      "platform": "github",
+      "repo_name": "JetBrains/swot"
+    },
+    {
+      "id": "34526884",
+      "platform": "github",
+      "repo_name": "ant-design/ant-design"
+    },
+    {
+      "id": "153097643",
+      "platform": "github",
+      "repo_name": "openvinotoolkit/openvino"
+    },
+    {
+      "id": "43160685",
+      "platform": "github",
+      "repo_name": "zulip/zulip"
+    },
+    {
+      "id": "2179920",
+      "platform": "github",
+      "repo_name": "woocommerce/woocommerce"
+    },
+    {
+      "id": "121516035",
+      "platform": "github",
+      "repo_name": "nrfconnect/sdk-nrf"
+    },
+    {
+      "id": "17165658",
+      "platform": "github",
+      "repo_name": "apache/spark"
+    },
+    {
+      "id": "260273356",
+      "platform": "github",
+      "repo_name": "harness/harness-core-ui"
+    },
+    {
+      "id": "463628495",
+      "platform": "github",
+      "repo_name": "pytorch/executorch"
+    },
+    {
+      "id": "845310018",
+      "platform": "github",
+      "repo_name": "badou-Michael/badouai-ai-special-2024"
+    },
+    {
+      "id": "893608858",
+      "platform": "github",
+      "repo_name": "CSolverV2/Kasada-Reverse"
+    },
+    {
+      "id": "658928958",
+      "platform": "github",
+      "repo_name": "ollama/ollama"
+    },
+    {
+      "id": "196414933",
+      "platform": "github",
+      "repo_name": "open-telemetry/opentelemetry-collector-contrib"
+    },
+    {
+      "id": "215783734",
+      "platform": "github",
+      "repo_name": "deckhouse/deckhouse"
+    },
+    {
+      "id": "644461337",
+      "platform": "github",
+      "repo_name": "vercel/ai"
+    },
+    {
+      "id": "131995661",
+      "platform": "github",
+      "repo_name": "shopware/shopware"
+    },
+    {
+      "id": "52855516",
+      "platform": "github",
+      "repo_name": "Homebrew/homebrew-core"
+    },
+    {
+      "id": "28457823",
+      "platform": "github",
+      "repo_name": "freeCodeCamp/freeCodeCamp"
+    },
+    {
+      "id": "867683658",
+      "platform": "github",
+      "repo_name": "learning-process/ppc-2024-autumn"
+    },
+    {
+      "id": "16184957",
+      "platform": "gitee",
+      "repo_name": "openharmony/arkui_ace_engine"
+    },
+    {
+      "id": "52558133",
+      "platform": "github",
+      "repo_name": "sonic-net/sonic-mgmt"
+    },
+    {
+      "id": "65711522",
+      "platform": "github",
+      "repo_name": "PaddlePaddle/Paddle"
+    },
+    {
+      "id": "39093389",
+      "platform": "github",
+      "repo_name": "Azure/azure-rest-api-specs"
+    },
+    {
+      "id": "184456251",
+      "platform": "github",
+      "repo_name": "microsoft/PowerToys"
+    },
+    {
+      "id": "392603437",
+      "platform": "github",
+      "repo_name": "NAStool/nas-tools"
+    },
+    {
+      "id": "28449431",
+      "platform": "github",
+      "repo_name": "scylladb/scylladb"
+    },
+    {
+      "id": "783473979",
+      "platform": "github",
+      "repo_name": "TheBi11iona1re/Study-App"
+    },
+    {
+      "id": "889795994",
+      "platform": "github",
+      "repo_name": "SXueLing/BadouNLP"
+    },
+    {
+      "id": "778556932",
+      "platform": "github",
+      "repo_name": "zen-browser/desktop"
+    },
+    {
+      "id": "604242594",
+      "platform": "github",
+      "repo_name": "AztecProtocol/aztec-packages"
+    },
+    {
+      "id": "296223466",
+      "platform": "github",
+      "repo_name": "hellodword/wechat-feeds"
+    },
+    {
+      "id": "523043277",
+      "platform": "github",
+      "repo_name": "astral-sh/ruff"
+    },
+    {
+      "id": "839037098",
+      "platform": "github",
+      "repo_name": "mastra-ai/mastra"
+    },
+    {
+      "id": "589831718",
+      "platform": "github",
+      "repo_name": "comfyanonymous/ComfyUI"
+    },
+    {
+      "id": "730534580",
+      "platform": "github",
+      "repo_name": "infiniflow/ragflow"
+    },
+    {
+      "id": "994093166",
+      "platform": "github",
+      "repo_name": "basecamp/omarchy"
+    },
+    {
+      "id": "772971550",
+      "platform": "github",
+      "repo_name": "michael0420/badou-ai-special-2024"
+    },
+    {
+      "id": "489754271",
+      "platform": "github",
+      "repo_name": "Kas-tle/java2bedrock.sh"
+    },
+    {
+      "id": "155360607",
+      "platform": "github",
+      "repo_name": "ovh/manager"
+    },
+    {
+      "id": "421856493",
+      "platform": "github",
+      "repo_name": "tryber/sd-014-b-project-starwars-planets-search"
+    },
+    {
+      "id": "861218187",
+      "platform": "github",
+      "repo_name": "WinampDesktop/winamp"
+    },
+    {
+      "id": "24195339",
+      "platform": "github",
+      "repo_name": "angular/angular"
+    },
+    {
+      "id": "137503442",
+      "platform": "github",
+      "repo_name": "void-linux/void-packages"
+    },
+    {
+      "id": "616330546",
+      "platform": "github",
+      "repo_name": "osammy820/SE_WebTech_Repo"
+    },
+    {
+      "id": "516415006",
+      "platform": "github",
+      "repo_name": "ylabio/react-webinar-2"
+    },
+    {
+      "id": "51478266",
+      "platform": "github",
+      "repo_name": "kubernetes/website"
+    },
+    {
+      "id": "262395224",
+      "platform": "github",
+      "repo_name": "dotnet/maui"
+    },
+    {
+      "id": "765605091",
+      "platform": "github",
+      "repo_name": "ROCm/TheRock"
+    },
+    {
+      "id": "725951957",
+      "platform": "github",
+      "repo_name": "Daquiver1/Frontend-Grading-Assignment"
+    },
+    {
+      "id": "44781140",
+      "platform": "github",
+      "repo_name": "greenplum-db/gpdb"
+    },
+    {
+      "id": "65227344",
+      "platform": "github",
+      "repo_name": "NoxxDev/NecroBot"
+    },
+    {
+      "id": "23096959",
+      "platform": "github",
+      "repo_name": "golang/go"
+    },
+    {
+      "id": "156939672",
+      "platform": "github",
+      "repo_name": "microsoft/onnxruntime"
+    },
+    {
+      "id": "762771867",
+      "platform": "github",
+      "repo_name": "Goob-Station/Goob-Station"
+    },
+    {
+      "id": "533917104",
+      "platform": "github",
+      "repo_name": "wolfi-dev/os"
+    },
+    {
+      "id": "306215639",
+      "platform": "github",
+      "repo_name": "interesting-1024/end"
+    },
+    {
+      "id": "790381337",
+      "platform": "github",
+      "repo_name": "elastic/docs-content"
+    },
+    {
+      "id": "226368338",
+      "platform": "github",
+      "repo_name": "evcc-io/evcc"
+    },
+    {
+      "id": "11125589",
+      "platform": "github",
+      "repo_name": "keycloak/keycloak"
+    },
+    {
+      "id": "40556106",
+      "platform": "github",
+      "repo_name": "wazuh/wazuh"
+    },
+    {
+      "id": "68312233",
+      "platform": "github",
+      "repo_name": "microsoft/vcpkg"
+    },
+    {
+      "id": "148657224",
+      "platform": "github",
+      "repo_name": "trezor/trezor-suite"
+    },
+    {
+      "id": "982820073",
+      "platform": "github",
+      "repo_name": "SXLNLP/BadouNLP"
+    },
+    {
+      "id": "5973855",
+      "platform": "github",
+      "repo_name": "CleverRaven/Cataclysm-DDA"
+    },
+    {
+      "id": "444497690",
+      "platform": "github",
+      "repo_name": "LedgerHQ/ledger-live"
+    },
+    {
+      "id": "210828684",
+      "platform": "github",
+      "repo_name": "LuClass/Homework19Autumn"
+    },
+    {
+      "id": "492815690",
+      "platform": "github",
+      "repo_name": "Meta-Front-End-Developer-PC/m3l2_forking_lab"
+    },
+    {
+      "id": "128636610",
+      "platform": "github",
+      "repo_name": "Koenkk/zigbee2mqtt"
+    },
+    {
+      "id": "237523442",
+      "platform": "github",
+      "repo_name": "tailscale/tailscale"
+    },
+    {
+      "id": "469296872",
+      "platform": "github",
+      "repo_name": "leetcode-pp/91alg-7-daily-check"
+    },
+    {
+      "id": "701547123",
+      "platform": "github",
+      "repo_name": "open-webui/open-webui"
+    },
+    {
+      "id": "426075845",
+      "platform": "github",
+      "repo_name": "MystenLabs/sui"
+    },
+    {
+      "id": "7696525",
+      "platform": "gitee",
+      "repo_name": "openeuler/kernel"
+    },
+    {
+      "id": "41986369",
+      "platform": "github",
+      "repo_name": "pingcap/tidb"
+    },
+    {
+      "id": "7569578",
+      "platform": "github",
+      "repo_name": "discourse/discourse"
+    },
+    {
+      "id": "2211243",
+      "platform": "github",
+      "repo_name": "apache/kafka"
+    },
+    {
+      "id": "740218619",
+      "platform": "github",
+      "repo_name": "Vadimohka/Fundamentals-of-algorithmization-and-programming"
+    },
+    {
+      "id": "32873313",
+      "platform": "github",
+      "repo_name": "systemd/systemd"
+    },
+    {
+      "id": "40499714",
+      "platform": "github",
+      "repo_name": "gentoo/gentoo"
+    },
+    {
+      "id": "542750664",
+      "platform": "github",
+      "repo_name": "he4rt/he4rtoberfest-2022"
+    },
+    {
+      "id": "105944401",
+      "platform": "github",
+      "repo_name": "yugabyte/yugabyte-db"
+    },
+    {
+      "id": "846698999",
+      "platform": "github",
+      "repo_name": "block/goose"
+    },
+    {
+      "id": "234798675",
+      "platform": "github",
+      "repo_name": "bevyengine/bevy"
+    },
+    {
+      "id": "674559306",
+      "platform": "github",
+      "repo_name": "paritytech/polkadot-sdk"
+    },
+    {
+      "id": "16184960",
+      "platform": "gitee",
+      "repo_name": "openharmony/communication_dsoftbus"
+    },
+    {
+      "id": "22637619",
+      "platform": "github",
+      "repo_name": "AdguardTeam/AdguardFilters"
+    },
+    {
+      "id": "268853123",
+      "platform": "github",
+      "repo_name": "Seymaster/HNG_storm-task"
+    },
+    {
+      "id": "208728772",
+      "platform": "github",
+      "repo_name": "milvus-io/milvus"
+    },
+    {
+      "id": "881506708",
+      "platform": "github",
+      "repo_name": "RooCodeInc/Roo-Code"
+    },
+    {
+      "id": "814403270",
+      "platform": "github",
+      "repo_name": "Comfy-Org/ComfyUI_frontend"
+    },
+    {
+      "id": "24250009",
+      "platform": "github",
+      "repo_name": "code-dot-org/code-dot-org"
+    },
+    {
+      "id": "60243197",
+      "platform": "github",
+      "repo_name": "nextcloud/server"
+    },
+    {
+      "id": "507861208",
+      "platform": "github",
+      "repo_name": "PaddlePaddle/FastDeploy"
+    },
+    {
+      "id": "28312955",
+      "platform": "github",
+      "repo_name": "home-assistant/home-assistant.io"
+    },
+    {
+      "id": "816473585",
+      "platform": "github",
+      "repo_name": "tenstorrent/tt-mlir"
+    },
+    {
+      "id": "358917318",
+      "platform": "github",
+      "repo_name": "apache/datafusion"
+    },
+    {
+      "id": "16408992",
+      "platform": "github",
+      "repo_name": "neovim/neovim"
+    },
+    {
+      "id": "572984571",
+      "platform": "github",
+      "repo_name": "twentyhq/twenty"
+    },
+    {
+      "id": "7634677",
+      "platform": "github",
+      "repo_name": "openssl/openssl"
+    },
+    {
+      "id": "350722530",
+      "platform": "github",
+      "repo_name": "deepakuniyaliit/webPractice"
+    },
+    {
+      "id": "699172433",
+      "platform": "github",
+      "repo_name": "RedRoverSchool/JenkinsQA_07"
+    },
+    {
+      "id": "4127088",
+      "platform": "github",
+      "repo_name": "Azure/azure-sdk-for-python"
+    },
+    {
+      "id": "295774370",
+      "platform": "github",
+      "repo_name": "mdn/content"
+    },
+    {
+      "id": "599320067",
+      "platform": "github",
+      "repo_name": "langflow-ai/langflow"
+    },
+    {
+      "id": "38982731",
+      "platform": "github",
+      "repo_name": "home-assistant/frontend"
+    },
+    {
+      "id": "139914932",
+      "platform": "github",
+      "repo_name": "quarkusio/quarkus"
+    },
+    {
+      "id": "110178895",
+      "platform": "github",
+      "repo_name": "brave/brave-browser"
+    },
+    {
+      "id": "65214191",
+      "platform": "github",
+      "repo_name": "envoyproxy/envoy"
+    },
+    {
+      "id": "327089870",
+      "platform": "github",
+      "repo_name": "payloadcms/payload"
+    },
+    {
+      "id": "107515450",
+      "platform": "github",
+      "repo_name": "LightsHope/server"
+    },
+    {
+      "id": "413587323",
+      "platform": "github",
+      "repo_name": "tryber/sd-011-project-talker-manager"
+    },
+    {
+      "id": "768682843",
+      "platform": "github",
+      "repo_name": "DeepakReddyG/Hello_ZeroOne"
+    },
+    {
+      "id": "46398090",
+      "platform": "github",
+      "repo_name": "datahub-project/datahub"
+    },
+    {
+      "id": "740710728",
+      "platform": "github",
+      "repo_name": "keiyoushi/extensions-source"
+    },
+    {
+      "id": "53432472",
+      "platform": "github",
+      "repo_name": "sonic-net/sonic-buildimage"
+    },
+    {
+      "id": "552877440",
+      "platform": "github",
+      "repo_name": "juspay/hyperswitch"
+    },
+    {
+      "id": "3390243",
+      "platform": "github",
+      "repo_name": "servo/servo"
+    },
+    {
+      "id": "599431918",
+      "platform": "github",
+      "repo_name": "oxc-project/oxc"
+    },
+    {
+      "id": "29071833",
+      "platform": "gitee",
+      "repo_name": "openkylin/cybersectookits"
+    },
+    {
+      "id": "372979989",
+      "platform": "github",
+      "repo_name": "tryber/sd-07-project-webchat"
+    },
+    {
+      "id": "15019962",
+      "platform": "github",
+      "repo_name": "tldr-pages/tldr"
+    },
+    {
+      "id": "64050534",
+      "platform": "github",
+      "repo_name": "finndev/PokeBuddy"
+    },
+    {
+      "id": "268849829",
+      "platform": "github",
+      "repo_name": "DreyWesson/team-superman-hngi7"
+    },
+    {
+      "id": "268903235",
+      "platform": "github",
+      "repo_name": "ifatoki/hng-wonderwoman-task-1"
+    },
+    {
+      "id": "307260205",
+      "platform": "github",
+      "repo_name": "yt-dlp/yt-dlp"
+    },
+    {
+      "id": "16184969",
+      "platform": "gitee",
+      "repo_name": "openharmony/graphic_graphic_2d"
+    },
+    {
+      "id": "103694377",
+      "platform": "github",
+      "repo_name": "OpenLiberty/open-liberty"
+    },
+    {
+      "id": "818331198",
+      "platform": "github",
+      "repo_name": "pydantic/pydantic-ai"
+    },
+    {
+      "id": "946087422",
+      "platform": "github",
+      "repo_name": "Kilo-Org/kilocode"
+    },
+    {
+      "id": "136202695",
+      "platform": "github",
+      "repo_name": "mlflow/mlflow"
+    },
+    {
+      "id": "392332062",
+      "platform": "github",
+      "repo_name": "tryber/sd-012-project-trivia-react-redux"
+    },
+    {
+      "id": "808045485",
+      "platform": "github",
+      "repo_name": "LadybirdBrowser/ladybird"
+    },
+    {
+      "id": "390032985",
+      "platform": "github",
+      "repo_name": "ROCm/composable_kernel"
+    },
+    {
+      "id": "39464018",
+      "platform": "github",
+      "repo_name": "apache/superset"
+    },
+    {
+      "id": "2928944",
+      "platform": "github",
+      "repo_name": "Azure/azure-sdk-for-net"
+    },
+    {
+      "id": "262342594",
+      "platform": "github",
+      "repo_name": "obsidianmd/obsidian-releases"
+    },
+    {
+      "id": "514553345",
+      "platform": "github",
+      "repo_name": "OrcaSlicer/OrcaSlicer"
+    },
+    {
+      "id": "1050225087",
+      "platform": "github",
+      "repo_name": "ibm-developer-skills-network/mcino-Introduction-to-Git-and-GitHub"
+    },
+    {
+      "id": "974445592",
+      "platform": "github",
+      "repo_name": "microsoft/agent-framework"
+    },
+    {
+      "id": "488641606",
+      "platform": "github",
+      "repo_name": "agno-agi/agno"
+    },
+    {
+      "id": "740722964",
+      "platform": "github",
+      "repo_name": "G-gnome/Lectures"
+    },
+    {
+      "id": "408835796",
+      "platform": "github",
+      "repo_name": "tryber/sd-013-b-project-recipes-app"
+    },
+    {
+      "id": "834032099",
+      "platform": "github",
+      "repo_name": "Azure-Peak/Azure-Peak"
+    },
+    {
+      "id": "673412924",
+      "platform": "github",
+      "repo_name": "modelscope/ms-swift"
+    },
+    {
+      "id": "283046497",
+      "platform": "github",
+      "repo_name": "airbytehq/airbyte"
+    },
+    {
+      "id": "391740664",
+      "platform": "github",
+      "repo_name": "open-metadata/OpenMetadata"
+    },
+    {
+      "id": "537233603",
+      "platform": "github",
+      "repo_name": "paradigmxyz/reth"
+    },
+    {
+      "id": "365701873",
+      "platform": "github",
+      "repo_name": "dfinity/ic"
+    },
+    {
+      "id": "151262517",
+      "platform": "github",
+      "repo_name": "rgehan/hacktoberfest-2k18-katas"
+    },
+    {
+      "id": "23496542",
+      "platform": "github",
+      "repo_name": "triton-lang/triton"
+    },
+    {
+      "id": "35866694",
+      "platform": "github",
+      "repo_name": "RocketChat/Rocket.Chat"
+    },
+    {
+      "id": "268893398",
+      "platform": "github",
+      "repo_name": "tomiwaajayi/HNGi7-task-2"
+    },
+    {
+      "id": "166515022",
+      "platform": "github",
+      "repo_name": "trinodb/trino"
+    },
+    {
+      "id": "1003854381",
+      "platform": "github",
+      "repo_name": "kirodotdev/Kiro"
+    },
+    {
+      "id": "93444615",
+      "platform": "github",
+      "repo_name": "hashicorp/terraform-provider-aws"
+    },
+    {
+      "id": "236095576",
+      "platform": "github",
+      "repo_name": "backstage/backstage"
+    },
+    {
+      "id": "158256479",
+      "platform": "github",
+      "repo_name": "apache/iceberg"
+    },
+    {
+      "id": "699532645",
+      "platform": "github",
+      "repo_name": "astral-sh/uv"
+    },
+    {
+      "id": "203611792",
+      "platform": "github",
+      "repo_name": "OpenRailAssociation/osrd"
+    },
+    {
+      "id": "268917480",
+      "platform": "github",
+      "repo_name": "team-titians/HNGi7_Titans_Task2"
+    },
+    {
+      "id": "643445235",
+      "platform": "github",
+      "repo_name": "lobehub/lobe-chat"
+    },
+    {
+      "id": "321278",
+      "platform": "github",
+      "repo_name": "npm/npm"
+    },
+    {
+      "id": "7548986",
+      "platform": "github",
+      "repo_name": "laravel/framework"
+    },
+    {
+      "id": "70365100",
+      "platform": "github",
+      "repo_name": "macports/macports-ports"
+    },
+    {
+      "id": "204164353",
+      "platform": "github",
+      "repo_name": "kestra-io/kestra"
+    },
+    {
+      "id": "1011496647",
+      "platform": "github",
+      "repo_name": "Scarlet-Reach/Scarlet-Reach"
+    },
+    {
+      "id": "93446042",
+      "platform": "github",
+      "repo_name": "hashicorp/terraform-provider-azurerm"
+    },
+    {
+      "id": "984376616",
+      "platform": "github",
+      "repo_name": "langchain-ai/docs"
+    }
+  ]
+}

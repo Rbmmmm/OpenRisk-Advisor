@@ -1,0 +1,1162 @@
+version: "0.1.0"
+description: >
+  OpenRisk-Advisor signals: decline/health early-warning signals built on OpenDigger repo-level metrics.
+  Signals are configuration-driven, reproducible, auditable, and explainable.
+  All thresholds are initial defaults and should be calibrated with backtesting.
+
+# -----------------------------------------------------------------------------
+# Global conventions / schema
+# -----------------------------------------------------------------------------
+schema:
+  period_granularity: "month"            # month as primary timeline
+  support_granularity: ["quarter", "year"]
+  default_currency: "value"
+  time_alignment:
+    month_key: "YYYY-MM"
+    quarter_key: "YYYYQX"
+    year_key: "YYYY"
+  missing_policy:
+    # OpenDigger may provide both YYYY-MM and YYYY-MM-raw.
+    # We keep both: continuous for modeling; raw for audit.
+    keep_continuous: true
+    keep_raw: true
+  confidence_policy:
+    # Use raw/interp markers to avoid over-trusting interpolated spans.
+    # These fields are expected to be produced by derive_features.py
+    raw_ratio_feature_suffix: "raw_ratio_win"     # e.g., activity_raw_ratio_win3
+    interp_ratio_feature_suffix: "interp_ratio_win"
+    confidence_tiers:
+      high:
+        min_raw_ratio: 0.67
+        max_interp_ratio: 0.33
+      medium:
+        min_raw_ratio: 0.34
+        max_interp_ratio: 0.66
+      low:
+        min_raw_ratio: 0.00
+        max_interp_ratio: 1.00
+
+# -----------------------------------------------------------------------------
+# Severity & scoring
+# -----------------------------------------------------------------------------
+scoring:
+  # Signal -> score in [0,100] for downstream aggregation
+  # risk_score = sum(score_i * weight_i) with caps/normalization in risk module.
+  severity_levels:
+    info:   { score: 10 }
+    warn:   { score: 30 }
+    major:  { score: 60 }
+    critical: { score: 85 }
+
+  # Default weight when not specified
+  default_weight: 1.0
+
+# -----------------------------------------------------------------------------
+# Common windows & helpers (macros-like references)
+# -----------------------------------------------------------------------------
+windows:
+  win2:  { months: 2,  label: "2m" }
+  win3:  { months: 3,  label: "3m" }
+  win6:  { months: 6,  label: "6m" }
+  win12: { months: 12, label: "12m" }
+  qref:  { quarters: 2, label: "2q" }     # for robust confirmation
+  yref:  { years: 2,    label: "2y" }
+
+# -----------------------------------------------------------------------------
+# Feature naming conventions (assumed)
+# -----------------------------------------------------------------------------
+# Base metric series (monthly) are expected in wide table as:
+#   openrank, community_openrank, activity, stars, attention, participants, ...
+#
+# Derived features naming (suggested) per metric `m`:
+#   m_mom                # month-over-month relative change (fraction)
+#   m_yoy                # year-over-year relative change (fraction)
+#   m_roll_mean_3        # rolling mean (3m)
+#   m_roll_std_3         # rolling std (3m)
+#   m_trend_slope_3      # linear slope over last 3 months (value per month)
+#   m_trend_slope_6
+#   m_zscore_12          # z-score vs last 12 months distribution
+#   m_raw_ratio_win3     # raw ratio within last 3m window
+#   m_interp_ratio_win3  # interpolation ratio within last 3m window
+#
+# For nested/object metrics like issue_response_time.avg or p95:
+#   issue_response_time.avg, issue_response_time.p50, issue_response_time.p95 ...
+# and then derived:
+#   issue_response_time.p95_yoy, issue_response_time.p95_trend_slope_3, etc.
+
+feature_conventions:
+  mom: "fraction"     # e.g., -0.2 means -20%
+  yoy: "fraction"
+  slope: "value_per_month"
+  zscore: "std_units"
+
+# -----------------------------------------------------------------------------
+# Dimension definitions
+# -----------------------------------------------------------------------------
+dimensions:
+  activity_throughput:
+    description: "Whether the dev pipeline keeps running (code + PR/issue events)."
+    metrics:
+      - activity
+      - change_requests
+      - change_requests_accepted
+      - issues_new
+      - issues_closed
+      - code_change_lines_sum
+  contributors_concentration:
+    description: "Whether there are enough contributors and concentration risk exists."
+    metrics:
+      - contributors
+      - new_contributors
+      - inactive_contributors
+      - bus_factor
+  collaboration_efficiency:
+    description: "Whether work is handled efficiently (latency/age/duration and backlog pressure)."
+    metrics:
+      - issue_age
+      - issue_response_time
+      - issue_resolution_duration
+      - change_request_age
+      - change_request_response_time
+      - change_request_resolution_duration
+  attention_engagement:
+    description: "External attention/engagement as auxiliary, not sole decision."
+    metrics:
+      - stars
+      - attention
+      - participants
+  openrank_reference:
+    description: "Cross-dimension reference axis (global/community)."
+    metrics:
+      - openrank
+      - community_openrank
+
+# -----------------------------------------------------------------------------
+# Signals
+# -----------------------------------------------------------------------------
+signals:
+
+  # ===========================================================================
+  # A. Activity / Throughput decline
+  # ===========================================================================
+  - id: ACT_DROP_YOY_3M
+    name: "活跃度同比持续下滑（3个月）"
+    dimension: "activity_throughput"
+    severity: "major"
+    weight: 1.2
+    enabled: true
+    require_quarter_alignment: true
+
+    requires:
+      any_of_metrics: ["activity"]
+      derived_features: ["activity_yoy", "activity_trend_slope_3"]
+    window: "win3"
+
+    conditions:
+      all:
+        - feature: "activity_yoy"
+          op: "<="
+          value: -0.10           # <= -10% YoY (looser)
+        - feature: "activity_trend_slope_3"
+          op: "<"
+          value: 0               # negative slope over last 3 months
+
+    consistency:
+      # require k-of-last-n months to satisfy
+      type: "k_of_n"
+      k: 2
+      n: 3
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "activity_raw_ratio_win3"
+      interp_ratio_feature: "activity_interp_ratio_win3"
+
+    min_coverage:
+      # percentage of months in window having valid values
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        最近3个月 activity 出现同比持续下滑且短期趋势为负，提示产出节奏可能进入衰退通道。
+      evidence_fields:
+        - "activity"
+        - "activity_yoy"
+        - "activity_trend_slope_3"
+        - "activity_raw_ratio_win3"
+        - "activity_interp_ratio_win3"
+
+  - id: CODE_CHURN_DROP_3M
+    name: "代码变更规模下滑（3个月）"
+    dimension: "activity_throughput"
+    severity: "warn"
+    weight: 0.9
+    enabled: true
+
+    requires:
+      any_of_metrics: ["code_change_lines_sum"]
+      derived_features: ["code_change_lines_sum_yoy", "code_change_lines_sum_trend_slope_3"]
+    window: "win3"
+
+    conditions:
+      all:
+        - feature: "code_change_lines_sum_yoy"
+          op: "<="
+          value: -0.15           # <= -15% YoY (looser)
+        - feature: "code_change_lines_sum_trend_slope_3"
+          op: "<"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 2
+      n: 3
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "code_change_lines_sum_raw_ratio_win3"
+      interp_ratio_feature: "code_change_lines_sum_interp_ratio_win3"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        近3个月代码变更规模（新增+删除）同比明显下滑且趋势向下，提示研发投入或演进速度降低。
+      evidence_fields:
+        - "code_change_lines_sum"
+        - "code_change_lines_sum_yoy"
+        - "code_change_lines_sum_trend_slope_3"
+
+  - id: PR_THROUGHPUT_DROP_3M
+    name: "PR 流水线吞吐下降（3个月）"
+    dimension: "activity_throughput"
+    severity: "warn"
+    weight: 1.0
+    enabled: true
+
+    requires:
+      any_of_metrics: ["change_requests", "change_requests_accepted"]
+      derived_features:
+        - "change_requests_yoy"
+        - "change_requests_accepted_yoy"
+        - "change_requests_trend_slope_3"
+    window: "win3"
+
+    conditions:
+      all:
+        - feature: "change_requests_yoy"
+          op: "<="
+          value: -0.15
+        - feature: "change_requests_accepted_yoy"
+          op: "<="
+          value: -0.15
+        - feature: "change_requests_trend_slope_3"
+          op: "<"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 2
+      n: 3
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "change_requests_raw_ratio_win3"
+      interp_ratio_feature: "change_requests_interp_ratio_win3"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        PR 相关事件量与被接受量同比同步下降，且短期趋势为负，提示协作与产出可能萎缩。
+      evidence_fields:
+        - "change_requests"
+        - "change_requests_accepted"
+        - "change_requests_yoy"
+        - "change_requests_accepted_yoy"
+
+  - id: ISSUE_INFLOW_DROP_3M
+    name: "Issue 新增下降（3个月，解释性信号）"
+    dimension: "activity_throughput"
+    severity: "info"
+    weight: 0.6
+    enabled: true
+
+    requires:
+      any_of_metrics: ["issues_new"]
+      derived_features: ["issues_new_yoy"]
+    window: "win3"
+
+    conditions:
+      all:
+        - feature: "issues_new_yoy"
+          op: "<="
+          value: -0.20
+
+    consistency:
+      type: "k_of_n"
+      k: 1
+      n: 3
+
+    confidence:
+      tier: "low"
+      raw_ratio_feature: "issues_new_raw_ratio_win3"
+      interp_ratio_feature: "issues_new_interp_ratio_win3"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        Issue 新增同比显著下降。该信号单独不判定衰退，更多用于分型解释（需求减少/用户减少/渠道变化）。
+      evidence_fields:
+        - "issues_new"
+        - "issues_new_yoy"
+
+  # ===========================================================================
+  # B. Contributors / Concentration risk
+  # ===========================================================================
+  - id: CONTRIB_SHRINK_3M
+    name: "贡献者规模收缩（3个月）"
+    dimension: "contributors_concentration"
+    severity: "major"
+    weight: 1.2
+    enabled: true
+
+    requires:
+      any_of_metrics: ["contributors"]
+      derived_features: ["contributors_yoy", "contributors_trend_slope_3"]
+    window: "win3"
+
+    conditions:
+      all:
+        - feature: "contributors_yoy"
+          op: "<="
+          value: -0.10
+        - feature: "contributors_trend_slope_3"
+          op: "<"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 2
+      n: 3
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "contributors_raw_ratio_win3"
+      interp_ratio_feature: "contributors_interp_ratio_win3"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        活跃贡献者规模同比下降且短期趋势为负，提示人力投入减少或核心维护团队萎缩风险。
+      evidence_fields:
+        - "contributors"
+        - "contributors_yoy"
+        - "contributors_trend_slope_3"
+
+  - id: NEW_CONTRIB_DROP_6M
+    name: "新贡献者补给不足（6个月）"
+    dimension: "contributors_concentration"
+    severity: "warn"
+    weight: 1.0
+    enabled: true
+
+    requires:
+      any_of_metrics: ["new_contributors"]
+      derived_features: ["new_contributors_yoy", "new_contributors_roll_mean_6"]
+    window: "win6"
+
+    conditions:
+      all:
+        - feature: "new_contributors_yoy"
+          op: "<="
+          value: -0.10
+        - feature: "new_contributors_roll_mean_6"
+          op: "<="
+          value: 2              # looser replenishment threshold
+
+    consistency:
+      type: "k_of_n"
+      k: 3
+      n: 6
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "new_contributors_raw_ratio_win6"
+      interp_ratio_feature: "new_contributors_interp_ratio_win6"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        新贡献者长期偏少且同比下降，提示外部补给不足，长期可能导致维护不可持续。
+      evidence_fields:
+        - "new_contributors"
+        - "new_contributors_yoy"
+        - "new_contributors_roll_mean_6"
+
+  - id: BUS_FACTOR_LOW_OR_DOWN
+    name: "Bus Factor 过低或持续下降（单点维护风险）"
+    dimension: "contributors_concentration"
+    severity: "critical"
+    weight: 1.4
+    enabled: true
+
+    requires:
+      any_of_metrics: ["bus_factor"]
+      derived_features: ["bus_factor_trend_slope_6", "bus_factor_yoy"]
+    window: "win6"
+
+    conditions:
+      any:
+        - all:
+            - feature: "bus_factor"
+              op: "<="
+              value: 2          # absolute low threshold (tune by ecosystem)
+            - feature: "bus_factor_roll_mean_6"
+              op: "<="
+              value: 2
+        - all:
+            - feature: "bus_factor_yoy"
+              op: "<="
+              value: -0.20
+            - feature: "bus_factor_trend_slope_6"
+              op: "<"
+              value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 4
+      n: 6
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "bus_factor_raw_ratio_win6"
+      interp_ratio_feature: "bus_factor_interp_ratio_win6"
+
+    min_coverage:
+      series: 0.75
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        Bus Factor 过低或呈下降趋势，提示关键贡献集中于极少数人，存在单点维护与突发不可持续风险。
+      evidence_fields:
+        - "bus_factor"
+        - "bus_factor_yoy"
+        - "bus_factor_trend_slope_6"
+
+  - id: INACTIVE_CONTRIB_SPIKE
+    name: "不活跃贡献者上升（流失加剧）"
+    dimension: "contributors_concentration"
+    severity: "warn"
+    weight: 0.8
+    enabled: true
+
+    requires:
+      any_of_metrics: ["inactive_contributors"]
+      derived_features: ["inactive_contributors_yoy", "inactive_contributors_trend_slope_3"]
+    window: "win3"
+
+    conditions:
+      all:
+        - feature: "inactive_contributors_yoy"
+          op: ">="
+          value: 0.10
+        - feature: "inactive_contributors_trend_slope_3"
+          op: ">"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 2
+      n: 3
+
+    confidence:
+      tier: "low"
+      raw_ratio_feature: "inactive_contributors_raw_ratio_win3"
+      interp_ratio_feature: "inactive_contributors_interp_ratio_win3"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        不活跃贡献者数上升且呈上行趋势，提示人员流失或参与度下降风险。
+      evidence_fields:
+        - "inactive_contributors"
+        - "inactive_contributors_yoy"
+        - "inactive_contributors_trend_slope_3"
+
+  # ===========================================================================
+  # C. Collaboration efficiency deterioration
+  # ===========================================================================
+  - id: ISSUE_AGE_WORSEN_3M
+    name: "Issue Age 恶化（积压与处理效率下降）"
+    dimension: "collaboration_efficiency"
+    severity: "major"
+    weight: 1.3
+    enabled: true
+    require_quarter_alignment: true
+
+    requires:
+      any_of_metrics: ["issue_age"]
+      derived_features: ["issue_age_yoy", "issue_age_trend_slope_3"]
+    window: "win3"
+
+    conditions:
+      all:
+        - feature: "issue_age_yoy"
+          op: ">="
+          value: 0.10          # looser
+        - feature: "issue_age_trend_slope_3"
+          op: ">"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 2
+      n: 3
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "issue_age_raw_ratio_win3"
+      interp_ratio_feature: "issue_age_interp_ratio_win3"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        Issue Age 同比上升且短期趋势为正，提示问题积压加重或处理效率下降。
+      evidence_fields:
+        - "issue_age"
+        - "issue_age_yoy"
+        - "issue_age_trend_slope_3"
+
+  - id: ISSUE_RESP_TIME_WORSEN_3M
+    name: "Issue 响应时间恶化（3个月）"
+    dimension: "collaboration_efficiency"
+    severity: "warn"
+    weight: 1.0
+    enabled: true
+
+    requires:
+      any_of_metrics: ["issue_response_time.avg", "issue_response_time.p95"]
+      derived_features:
+        - "issue_response_time.avg_yoy"
+        - "issue_response_time.p95_yoy"
+        - "issue_response_time.p95_trend_slope_3"
+    window: "win3"
+
+    conditions:
+      all:
+        - feature: "issue_response_time.p95_yoy"
+          op: ">="
+          value: 0.20
+        - feature: "issue_response_time.p95_trend_slope_3"
+          op: ">"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 2
+      n: 3
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "issue_response_time.p95_raw_ratio_win3"
+      interp_ratio_feature: "issue_response_time.p95_interp_ratio_win3"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        Issue 响应时间（长尾 p95）同比上升且趋势变差，提示维护响应能力下降。
+      evidence_fields:
+        - "issue_response_time.avg"
+        - "issue_response_time.p95"
+        - "issue_response_time.p95_yoy"
+        - "issue_response_time.p95_trend_slope_3"
+
+  - id: ISSUE_RESOLVE_DUR_WORSEN_6M
+    name: "Issue 解决时长恶化（6个月）"
+    dimension: "collaboration_efficiency"
+    severity: "major"
+    weight: 1.1
+    enabled: true
+
+    requires:
+      any_of_metrics: ["issue_resolution_duration.p95"]
+      derived_features:
+        - "issue_resolution_duration.p95_yoy"
+        - "issue_resolution_duration.p95_trend_slope_6"
+    window: "win6"
+
+    conditions:
+      all:
+        - feature: "issue_resolution_duration.p95_yoy"
+          op: ">="
+          value: 0.25
+        - feature: "issue_resolution_duration.p95_trend_slope_6"
+          op: ">"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 4
+      n: 6
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "issue_resolution_duration.p95_raw_ratio_win6"
+      interp_ratio_feature: "issue_resolution_duration.p95_interp_ratio_win6"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        Issue 解决时长（长尾 p95）在半年窗口内持续变差，提示治理与维护能力长期承压。
+      evidence_fields:
+        - "issue_resolution_duration.p95"
+        - "issue_resolution_duration.p95_yoy"
+        - "issue_resolution_duration.p95_trend_slope_6"
+
+  - id: PR_AGE_WORSEN_3M
+    name: "PR Age 恶化（3个月）"
+    dimension: "collaboration_efficiency"
+    severity: "warn"
+    weight: 0.9
+    enabled: true
+
+    requires:
+      any_of_metrics: ["change_request_age"]
+      derived_features: ["change_request_age_yoy", "change_request_age_trend_slope_3"]
+    window: "win3"
+
+    conditions:
+      all:
+        - feature: "change_request_age_yoy"
+          op: ">="
+          value: 0.15
+        - feature: "change_request_age_trend_slope_3"
+          op: ">"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 2
+      n: 3
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "change_request_age_raw_ratio_win3"
+      interp_ratio_feature: "change_request_age_interp_ratio_win3"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        PR Age 上升提示评审/合并处理变慢，可能出现维护者不足或流程阻塞。
+      evidence_fields:
+        - "change_request_age"
+        - "change_request_age_yoy"
+        - "change_request_age_trend_slope_3"
+
+  # ===========================================================================
+  # D. Supply-demand imbalance (backlog pressure)
+  # ===========================================================================
+  - id: ISSUE_SUPPLY_DEMAND_IMBALANCE_6M
+    name: "Issue 供需失衡（新增>关闭，持续6个月）"
+    dimension: "collaboration_efficiency"
+    severity: "major"
+    weight: 1.2
+    enabled: true
+
+    requires:
+      all_of_metrics: ["issues_new", "issues_closed"]
+      derived_features:
+        - "issues_new_roll_mean_6"
+        - "issues_closed_roll_mean_6"
+        - "issues_new_yoy"
+        - "issues_closed_yoy"
+    window: "win6"
+
+    conditions:
+      all:
+        - feature: "issues_new_roll_mean_6"
+          op: ">"
+          feature_ref: "issues_closed_roll_mean_6"   # mean inflow > outflow
+        # keep only the imbalance condition to reduce sensitivity to missing YoY
+
+    consistency:
+      type: "k_of_n"
+      k: 3
+      n: 6
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "issues_new_raw_ratio_win6"
+      interp_ratio_feature: "issues_new_interp_ratio_win6"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        半年窗口内 Issue 新增均值持续高于关闭均值，且关闭侧未改善，提示积压压力与供需失衡风险。
+      evidence_fields:
+        - "issues_new_roll_mean_6"
+        - "issues_closed_roll_mean_6"
+        - "issues_new_yoy"
+        - "issues_closed_yoy"
+
+  - id: PR_SUPPLY_DEMAND_IMBALANCE_6M
+    name: "PR 供需失衡（提交>接受，持续6个月）"
+    dimension: "collaboration_efficiency"
+    severity: "warn"
+    weight: 1.0
+    enabled: true
+
+    requires:
+      all_of_metrics: ["change_requests", "change_requests_accepted"]
+      derived_features:
+        - "change_requests_roll_mean_6"
+        - "change_requests_accepted_roll_mean_6"
+    window: "win6"
+
+    conditions:
+      all:
+        - feature: "change_requests_roll_mean_6"
+          op: ">"
+          feature_ref: "change_requests_accepted_roll_mean_6"
+
+    consistency:
+      type: "k_of_n"
+      k: 3
+      n: 6
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "change_requests_raw_ratio_win6"
+      interp_ratio_feature: "change_requests_interp_ratio_win6"
+
+    min_coverage:
+      series: 0.60
+      derived: 0.60
+
+    explain:
+      summary_template: >
+        PR 提交长期高于被接受量，提示评审/合并吞吐不足，可能积累未处理变更。
+      evidence_fields:
+        - "change_requests_roll_mean_6"
+        - "change_requests_accepted_roll_mean_6"
+
+  # ===========================================================================
+  # E. Attention/Engagement (auxiliary)
+  # ===========================================================================
+  - id: ATTENTION_DROP_6M_AUX
+    name: "外部关注衰减（辅助信号，6个月）"
+    dimension: "attention_engagement"
+    severity: "info"
+    weight: 0.7
+    enabled: true
+
+    requires:
+      any_of_metrics: ["attention", "stars", "participants"]
+      derived_features:
+        - "attention_yoy"
+        - "stars_yoy"
+        - "participants_yoy"
+    window: "win6"
+
+    conditions:
+      any:
+        - all:
+            - feature: "attention_yoy"
+              op: "<="
+              value: -0.15
+            - feature: "participants_yoy"
+              op: "<="
+              value: -0.10
+        - all:
+            - feature: "stars_yoy"
+              op: "<="
+              value: -0.20
+
+    consistency:
+      type: "k_of_n"
+      k: 3
+      n: 6
+
+    confidence:
+      tier: "low"
+      raw_ratio_feature: "attention_raw_ratio_win6"
+      interp_ratio_feature: "attention_interp_ratio_win6"
+
+    min_coverage:
+      series: 0.50
+      derived: 0.50
+
+    explain:
+      summary_template: >
+        外部关注相关指标在半年窗口内明显下降。该信号不单独判定衰退，只用于解释与分型。
+      evidence_fields:
+        - "attention"
+        - "attention_yoy"
+        - "participants"
+        - "participants_yoy"
+        - "stars"
+        - "stars_yoy"
+
+  # ===========================================================================
+  # F. OpenRank reference axis (cross-dimension)
+  # ===========================================================================
+  - id: OPENRANK_DROP_6M
+    name: "OpenRank 下滑（参照信号，非硬依赖，6个月）"
+    dimension: "openrank_reference"
+    severity: "info"
+    weight: 0.4
+    enabled: false
+    require_year_alignment: true
+
+    requires:
+      any_of_metrics: ["openrank"]
+      derived_features: ["openrank_yoy", "openrank_trend_slope_6"]
+    window: "win6"
+
+    conditions:
+      all:
+        - feature: "openrank_yoy"
+          op: "<="
+          value: -0.15
+        - feature: "openrank_trend_slope_6"
+          op: "<"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 4
+      n: 6
+
+    confidence:
+      tier: "medium"
+      raw_ratio_feature: "openrank_raw_ratio_win6"
+      interp_ratio_feature: "openrank_interp_ratio_win6"
+
+    min_coverage:
+      series: 0.70
+      derived: 0.70
+
+    explain:
+      summary_template: >
+        OpenRank 在半年窗口内同比下降且趋势为负，提示生态价值流下降（作为跨维度参照）。
+      evidence_fields:
+        - "openrank"
+        - "openrank_yoy"
+        - "openrank_trend_slope_6"
+
+  - id: COMMUNITY_OPENRANK_DROP_6M
+    name: "Community OpenRank 下滑（社区参照，6个月）"
+    dimension: "openrank_reference"
+    severity: "warn"
+    weight: 0.9
+    enabled: false
+
+    requires:
+      any_of_metrics: ["community_openrank"]
+      derived_features: ["community_openrank_yoy", "community_openrank_trend_slope_6"]
+    window: "win6"
+
+    conditions:
+      all:
+        - feature: "community_openrank_yoy"
+          op: "<="
+          value: -0.15
+        - feature: "community_openrank_trend_slope_6"
+          op: "<"
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 4
+      n: 6
+
+    confidence:
+      tier: "low"   # often missing; keep low to avoid false alarms
+      raw_ratio_feature: "community_openrank_raw_ratio_win6"
+      interp_ratio_feature: "community_openrank_interp_ratio_win6"
+
+    min_coverage:
+      series: 0.50
+      derived: 0.50
+
+    explain:
+      summary_template: >
+        社区维度 OpenRank 下降提示社区内价值流走弱。但该指标可能缺失，需结合覆盖率与其他维度解释。
+      evidence_fields:
+        - "community_openrank"
+        - "community_openrank_yoy"
+        - "community_openrank_trend_slope_6"
+
+  # ===========================================================================
+  # G. Composite signals (m-of-n across dimensions)
+  # ===========================================================================
+  - id: MULTI_DIMENSION_DECLINE_CORE
+    name: "多维度核心衰退（至少2/3维度共同触发）"
+    dimension: "composite"
+    severity: "critical"
+    weight: 1.5
+    enabled: true
+
+    # This composite references other signals' results
+    requires:
+      triggered_signals_any: ["ACT_DROP_YOY_3M", "CONTRIB_SHRINK_3M", "ISSUE_AGE_WORSEN_3M"]
+    window: "win3"
+
+    conditions:
+      composite:
+        type: "m_of_n_signals"
+        m: 2
+        n: 3
+        signals:
+          - "ACT_DROP_YOY_3M"
+          - "CONTRIB_SHRINK_3M"
+          - "ISSUE_AGE_WORSEN_3M"
+
+    consistency:
+      type: "k_of_n"
+      k: 2
+      n: 3
+
+    confidence:
+      tier: "medium"
+
+    explain:
+      summary_template: >
+        活跃度/贡献者/协作效率中至少两个维度在近3个月持续同向恶化，属于高置信的治理衰退风险。
+      evidence_fields:
+        - "triggered_signals"
+        - "trigger_months"
+        - "dimension_breakdown"
+
+  - id: DECLINE_WITH_OPENRANK_CONFIRM
+    name: "治理恶化且 OpenRank 同向下降（增强置信）"
+    dimension: "composite"
+    severity: "critical"
+    weight: 1.4
+    enabled: false
+
+    requires:
+      triggered_signals_all: ["MULTI_DIMENSION_DECLINE_CORE", "OPENRANK_DROP_6M"]
+    window: "win6"
+
+    conditions:
+      composite:
+        type: "all_signals"
+        signals:
+          - "MULTI_DIMENSION_DECLINE_CORE"
+          - "OPENRANK_DROP_6M"
+
+    consistency:
+      type: "once_in_window"
+      # if both already sustained, once is enough at composite layer
+
+    confidence:
+      tier: "medium"
+
+    explain:
+      summary_template: >
+        核心治理衰退信号出现，且 OpenRank 在更长窗口同向下滑，说明不仅内部治理承压，生态价值流也在走弱。
+      evidence_fields:
+        - "triggered_signals"
+
+  - id: MATURE_SLOWDOWN_NOT_DECLINE
+    name: "外部下降但内部稳定（成熟期自然减速，降级解释）"
+    dimension: "composite"
+    severity: "info"
+    weight: 0.5
+    enabled: true
+
+    requires:
+      triggered_signals_any: ["ATTENTION_DROP_6M_AUX"]
+      derived_features:
+        - "issue_age_trend_slope_6"
+        - "contributors_trend_slope_6"
+        - "activity_trend_slope_6"
+    window: "win6"
+
+    conditions:
+      all:
+        - feature: "issue_age_trend_slope_6"
+          op: "<="
+          value: 0           # efficiency not worsening
+        - feature: "contributors_trend_slope_6"
+          op: ">="
+          value: 0           # contributor scale not shrinking
+        - feature: "activity_trend_slope_6"
+          op: "<="
+          value: 0.0         # allow flat-ish; tune if needed
+
+    consistency:
+      type: "k_of_n"
+      k: 4
+      n: 6
+
+    confidence:
+      tier: "low"
+
+    explain:
+      summary_template: >
+        外部关注下降但内部治理未明显恶化，更像成熟期自然减速或曝光变化。该结论用于降低“衰退”误判。
+      evidence_fields:
+        - "ATTENTION_DROP_6M_AUX"
+        - "issue_age_trend_slope_6"
+        - "contributors_trend_slope_6"
+        - "activity_trend_slope_6"
+
+  - id: STABLE_NO_DECLINE_6M_INFO
+    name: "近期未发现衰退（稳定/健康，6个月）"
+    dimension: "composite"
+    severity: "info"
+    weight: 0.2
+    enabled: true
+
+    # This is a positive/coverage-friendly signal to avoid (none) being misread as “no data”.
+    # It triggers when core dimensions look stable over the last 6 months.
+    requires:
+      any_of_metrics: ["activity", "contributors"]
+      derived_features:
+        - "activity_trend_slope_6"
+        - "contributors_trend_slope_6"
+
+    window: "win6"
+
+    conditions:
+      all:
+        - any:
+            - feature: "activity_trend_slope_6"
+              op: ">="
+              value: 0
+            - feature: "activity_yoy"
+              op: ">="
+              value: -0.05
+        - any:
+            - feature: "contributors_trend_slope_6"
+              op: ">="
+              value: 0
+            - feature: "contributors_yoy"
+              op: ">="
+              value: -0.05
+        - any:
+            - feature: "issue_age_trend_slope_6"
+              op: "<="
+              value: 0
+            - feature: "issues_closed_trend_slope_6"
+              op: ">="
+              value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 3
+      n: 6
+
+    confidence:
+      tier: "low"
+
+    min_coverage:
+      series: 0.50
+      derived: 0.50
+
+    explain:
+      summary_template: >
+        近6个月核心维度整体稳定，暂未观察到显著的持续性衰退信号（用于“无衰退”分型，不代表永久安全）。
+      evidence_fields:
+        - "activity_trend_slope_6"
+        - "activity_yoy"
+        - "contributors_trend_slope_6"
+        - "contributors_yoy"
+        - "issue_age_trend_slope_6"
+        - "issues_closed_trend_slope_6"
+
+  - id: DATA_SUFFICIENT_6M
+    name: "数据覆盖充足（可评估，6个月）"
+    dimension: "composite"
+    severity: "info"
+    weight: 0.1
+    enabled: true
+    allow_partial_window: true
+
+    # Pure coverage signal: ensures (none) is not misread as “no data”.
+    requires:
+      all_of_metrics: ["activity", "contributors"]
+      derived_features:
+        - "activity_roll_mean_6"
+        - "contributors_roll_mean_6"
+
+    window: "win6"
+
+    conditions:
+      all:
+        - feature: "activity_roll_mean_6"
+          op: ">="
+          value: 0
+        - feature: "contributors_roll_mean_6"
+          op: ">="
+          value: 0
+
+    consistency:
+      type: "k_of_n"
+      k: 1
+      n: 6
+
+    confidence:
+      tier: "low"
+
+    min_coverage:
+      series: 0.50
+      derived: 0.50
+
+    explain:
+      summary_template: >
+        近6个月核心指标数据覆盖较完整，可用于风险评估与信号判定（不代表有风险）。
+      evidence_fields:
+        - "activity_roll_mean_6"
+        - "contributors_roll_mean_6"
+
+# -----------------------------------------------------------------------------
+# Output / audit settings for signal evaluation module (future)
+# -----------------------------------------------------------------------------
+runtime:
+  evaluation:
+    emit_trigger_events: true
+    store_evidence_snapshot: true
+    evidence_snapshot_table: "signal_evidence"     # suggested table name in SQLite/IoTDB later
+    include_raw_interp_flags: true
+  reporting:
+    markdown_report_path: "docs/signal_report.md"
+    include_top_n_repos: 50
+    include_per_signal_stats: true
+    include_coverage_warnings: true

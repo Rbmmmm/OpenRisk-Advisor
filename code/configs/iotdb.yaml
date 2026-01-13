@@ -1,0 +1,23 @@
+version: 1
+
+connection:
+  host: 127.0.0.1
+  port: 6667
+  username: root
+  password: root
+  enable_rpc_compression: false
+
+database:
+  root: root.openrisk
+  github: root.openrisk.github
+  gitee: root.openrisk.gitee
+
+mapping:
+  device_prefix: root.openrisk
+  device_format: "{platform}.{org}_{repo}"
+  raw_prefix: raw_
+  feat_prefix: feat_
+
+write:
+  use_aligned: true
+  batch_size: 500

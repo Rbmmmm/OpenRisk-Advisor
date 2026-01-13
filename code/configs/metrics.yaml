@@ -1,0 +1,136 @@
+version: 1
+
+defaults:
+  granularity: [month, quarter, year]
+  keep_raw: true
+  missing_policy: keep
+
+efficiency:
+  primary_metric: issue_age
+  fallback_metric: issues_closed
+
+metrics:
+  - name: openrank
+    file: openrank.json
+    level: repo
+    description: Repo-level OpenRank
+  - name: community_openrank
+    file: community_openrank.json
+    level: repo
+    description: Repo-level community OpenRank
+  - name: activity
+    file: activity.json
+    level: repo
+    description: Repo activity
+  - name: activity_details
+    file: activity_details.json
+    level: repo
+    description: Repo activity details
+  - name: stars
+    file: stars.json
+    level: repo
+    description: Stars count
+  - name: technical_fork
+    file: technical_fork.json
+    level: repo
+    description: Technical forks (CHAOSS)
+  - name: attention
+    file: attention.json
+    level: repo
+    description: Attention metric
+  - name: active_dates_and_times
+    file: active_dates_and_times.json
+    level: repo
+    description: Active dates and times
+  - name: new_contributors
+    file: new_contributors.json
+    level: repo
+    description: New contributors
+  - name: new_contributors_detail
+    file: new_contributors_detail.json
+    level: repo
+    description: New contributors detail
+  - name: contributors
+    file: contributors.json
+    level: repo
+    description: Contributors
+  - name: contributors_detail
+    file: contributors_detail.json
+    level: repo
+    description: Contributors detail
+  - name: inactive_contributors
+    file: inactive_contributors.json
+    level: repo
+    description: Inactive contributors
+  - name: participants
+    file: participants.json
+    level: repo
+    description: Participants
+  - name: bus_factor
+    file: bus_factor.json
+    level: repo
+    description: Bus factor
+  - name: bus_factor_detail
+    file: bus_factor_detail.json
+    level: repo
+    description: Bus factor detail
+  - name: issues_new
+    file: issues_new.json
+    level: repo
+    description: New issues
+  - name: issues_closed
+    file: issues_closed.json
+    level: repo
+    description: Closed issues
+  - name: issue_comments
+    file: issue_comments.json
+    level: repo
+    description: Issue comments
+  - name: issue_response_time
+    file: issue_response_time.json
+    level: repo
+    description: Issue response time
+  - name: issue_resolution_duration
+    file: issue_resolution_duration.json
+    level: repo
+    description: Issue resolution duration
+  - name: issue_age
+    file: issue_age.json
+    level: repo
+    description: Issue age
+  - name: change_requests
+    file: change_requests.json
+    level: repo
+    description: Change requests (PR)
+  - name: change_requests_accepted
+    file: change_requests_accepted.json
+    level: repo
+    description: Accepted change requests
+  - name: change_requests_reviews
+    file: change_requests_reviews.json
+    level: repo
+    description: Change request reviews
+  - name: change_request_response_time
+    file: change_request_response_time.json
+    level: repo
+    description: Change request response time
+  - name: change_request_resolution_duration
+    file: change_request_resolution_duration.json
+    level: repo
+    description: Change request resolution duration
+  - name: change_request_age
+    file: change_request_age.json
+    level: repo
+    description: Change request age
+  - name: code_change_lines_add
+    file: code_change_lines_add.json
+    level: repo
+    description: Code change lines add
+  - name: code_change_lines_remove
+    file: code_change_lines_remove.json
+    level: repo
+    description: Code change lines remove
+  - name: code_change_lines_sum
+    file: code_change_lines_sum.json
+    level: repo
+    description: Code change lines sum

@@ -1,0 +1,10 @@
+version: 1
+defaults:
+  platform: github
+  base_url: https://oss.open-digger.cn
+  cache_dir: data/cache
+  sqlite_path: data/sqlite/opendigger.db
+repos:
+- org: taozhiyu
+  repo: TyProAction
+  enabled: true
