@@ -2,7 +2,28 @@
 
 开源项目衰退风险预测与治理建议系统。该仓库包含完整数据管线、风险建模、证据链生成与可视化前端，所有核心结果以本地文件产物形式落盘，便于审计与复现。
 
-由于采取数据下载模型等耗时较久，因此代码里已经包含了数据和模型，可以直接启动前端来操作。
+## 下载数据库
+
+由于建立数据库需要时间较长，github 又无法上传大文件，因此发布在了仓库的 release 里，链接为：
+- https://github.com/Rbmmmm/OpenRisk-Advisor/releases/tag/v0.1.0-data
+- 也可以通过指令 `wget https://github.com/Rbmmmm/OpenRisk-Advisor/releases/download/v0.1.0-data/opendigger.db
+` 或 
+
+```bash
+curl -L -o opendigger.db \
+  https://github.com/Rbmmmm/OpenRisk-Advisor/releases/download/v0.1.0-data/opendigger.db
+``` 
+
+下载
+
+需要注意下载完需要把 `opendigger.db` 放在 `code/data/sqlite/` 下即 `data/sqlite/opendigger.db`。
+
+## 视频
+
+- 项目汇报视频：
+  - https://www.bilibili.com/video/BV1RqrLBqEUC/?spm_id_from=333.1387.upload.video_card.click&vd_source=cf2b6ed11510894c412447c8949c8cc7
+- 实机演示视频：
+  - https://www.bilibili.com/video/BV1dirLBMEv1/?share_source=copy_web&vd_source=3615cdee37e65abb40d1c38835e67b78
 
 ---
 
